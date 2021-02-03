@@ -17,7 +17,7 @@ module.exports = {
   },
   'rules': {
     '@typescript-eslint/naming-convention': 'warn',
-    '@typescript-eslint/semi': 'warn',
+    '@typescript-eslint/semi': ['error', 'never'],
     'semi': 'off',
     'curly': 'warn',
     'eqeqeq': 'warn',
@@ -231,4 +231,4 @@ module.exports = {
     ],
 
   },
-};
+}
