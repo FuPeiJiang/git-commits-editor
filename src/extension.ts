@@ -1,11 +1,6 @@
-// import * as vscode from 'vscode'
 import { languages, commands, Disposable, workspace, window } from 'vscode'
-// import { ExtensionContext, languages, commands, Disposable, workspace, window, DocumentSelector } from 'vscode'
 import { CodelensProvider } from './CodelensProvider'
-// import { getRanges } from './parser'
-// import { RangeGetter } from './parserOof'
 import { RangeGetter } from './RangeGetter'
-import { Bar } from './testClass'
 var d = console.debug.bind(console)
 let disposables: Disposable[] = []
 
