@@ -26,9 +26,7 @@ export function activate(): void {
   // console.debug('debugOk', startsWith)
   // return
 
-  const rangeGetter = new RangeGetter()
-  // d(rangeGetter)
-  const codelensProvider = new CodelensProvider(rangeGetter.bindGetRanges())
+  const codelensProvider = new CodelensProvider(RangeGetter.bindGetRanges())
   // const codelensProvider = new CodelensProvider(rangeGetter.getRanges.bind(rangeGetter))
   languages.registerCodeLensProvider({scheme: 'file', language: 'commits' }, codelensProvider)
 
@@ -40,7 +38,7 @@ export function activate(): void {
     workspace.getConfiguration('codelens-sample').update('enableCodeLens', false, true)
   })
 
-  commands.registerCommand('codelens-sample.codelensAction', (args: any) => {
+  commands.registerCommand('codelens-sample.codelensAction', (args: string) => {
     window.showInformationMessage(`CodeLens action clicked with args=${args}`)
   })
 }
