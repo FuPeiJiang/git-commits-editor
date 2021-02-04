@@ -2,16 +2,18 @@
 import { languages, commands, Disposable, workspace, window, DocumentSelector } from 'vscode'
 // import { ExtensionContext, languages, commands, Disposable, workspace, window, DocumentSelector } from 'vscode'
 import { CodelensProvider } from './CodelensProvider'
+import { getRanges } from './parser'
+
 let disposables: Disposable[] = []
 
 export function activate() {
   // export function activate(context: ExtensionContext) {
-  const codelensProvider = new CodelensProvider()
+  const codelensProvider = new CodelensProvider(getRanges)
 
   //sel: DocumentFilter
-  const sel: DocumentSelector = {scheme: 'file', language: 'commits' }
+  // const sel: DocumentSelector = {scheme: 'file', language: 'commits' }
 
-  languages.registerCodeLensProvider(sel, codelensProvider)
+  languages.registerCodeLensProvider({scheme: 'file', language: 'commits' }, codelensProvider)
 
   commands.registerCommand('codelens-sample.enableCodeLens', () => {
     workspace.getConfiguration('codelens-sample').update('enableCodeLens', true, true)
