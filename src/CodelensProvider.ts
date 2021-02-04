@@ -4,23 +4,23 @@ import { CodeLensProvider, TextDocument, CodeLens, workspace } from 'vscode'
  * CodelensProvider
  */
 
-type CallbackFunctionVariadicReturnCodeLens = (...args: any[]) => CodeLens[] | Thenable<CodeLens[]>;
+type CallbackFunctionVariadicReturnCodeLens = (...args: any[]) => CodeLens[] | Thenable<CodeLens[]>
 
 export class CodelensProvider implements CodeLensProvider {
-  getRanges: CallbackFunctionVariadicReturnCodeLens 
+  getRanges: CallbackFunctionVariadicReturnCodeLens
 
   // private regex: RegExp
   // private _onDidChangeCodeLenses: vscode.EventEmitter<void> = new vscode.EventEmitter<void>()
   // public readonly onDidChangeCodeLenses: vscode.Event<void> = this._onDidChangeCodeLenses.event
 
-    constructor(getRanges: CallbackFunctionVariadicReturnCodeLens) {
-      this.getRanges=getRanges
-  // this.regex = /(.+)/g
+  constructor(getRanges: CallbackFunctionVariadicReturnCodeLens) {
+    this.getRanges = getRanges
+    // this.regex = /(.+)/g
 
   //   workspace.onDidChangeConfiguration(() => {
   // this._onDidChangeCodeLenses.fire()
   //   })
-    }
+  }
 
   public provideCodeLenses(document: TextDocument): CodeLens[] | Thenable<CodeLens[]> {
     // public provideCodeLenses(document: TextDocument, token: vscode.CancellationToken): CodeLens[] | Thenable<CodeLens[]> {
@@ -45,4 +45,5 @@ export class CodelensProvider implements CodeLensProvider {
     }
     return null
   }
-} */
+  */
+}

@@ -10,9 +10,6 @@ export function activate() {
   // export function activate(context: ExtensionContext) {
   const codelensProvider = new CodelensProvider(getRanges)
 
-  //sel: DocumentFilter
-  // const sel: DocumentSelector = {scheme: 'file', language: 'commits' }
-
   languages.registerCodeLensProvider({scheme: 'file', language: 'commits' }, codelensProvider)
 
   commands.registerCommand('codelens-sample.enableCodeLens', () => {
