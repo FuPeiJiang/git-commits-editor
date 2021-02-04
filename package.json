@@ -1,5 +1,5 @@
 {
-  "name": "git-commits-editor",
+	"name": "git-commits-editor",
 	"displayName": "git-commits-editor",
 	"description": "",
 	"publisher": "FuPeiJiang",
@@ -15,7 +15,7 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:git-commits-editor.helloWorld"
+		"onLanguage:commits"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
@@ -23,6 +23,18 @@
 			{
 				"command": "git-commits-editor.helloWorld",
 				"title": "Hello World"
+			}
+		],
+		"languages": [
+			{
+				"id": "commits",
+				"extensions": [
+					".commits"
+				],
+				"aliases": [
+					"Commits",
+					"commits"
+				]
 			}
 		]
 	},
