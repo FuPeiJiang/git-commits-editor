@@ -34,7 +34,8 @@
 				"aliases": [
 					"Commits",
 					"commits"
-				]
+				],
+				"configuration": "./language-configuration.json"
 			}
 		]
 	},
