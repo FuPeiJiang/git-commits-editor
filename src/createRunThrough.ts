@@ -7,7 +7,7 @@ type TypearrayOfToml = Array<[CallbackIfEval,CallBackUntilOtherEval]>
 type CallbackFunctionString = (line: string) => string
 var d = console.debug.bind(console)
 
-type TypeStringToVoid = (line: string) => void
+// type TypeStringToVoid = (line: string) => void
 export default (arrayOfToml: TypearrayOfToml, preprocessorForOther: CallbackFunctionString) => {
 
   return (document: TextDocument): void => {

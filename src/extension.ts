@@ -1,6 +1,7 @@
 import { languages, commands, Disposable, workspace, window } from 'vscode'
 import { CodelensProvider } from './CodelensProvider'
 import { RangeGetter } from './RangeGetter'
+import { createRangeGetter } from './createRangeGetter'
 var d = console.debug.bind(console)
 let disposables: Disposable[] = []
 
@@ -26,7 +27,8 @@ export function activate(): void {
   // console.debug('debugOk', startsWith)
   // return
 
-  const codelensProvider = new CodelensProvider(RangeGetter.bindGetRanges())
+  const codelensProvider = new CodelensProvider(createRangeGetter())
+  // const codelensProvider = new CodelensProvider(RangeGetter.bindGetRanges())
   // const codelensProvider = new CodelensProvider(rangeGetter.getRanges.bind(rangeGetter))
   languages.registerCodeLensProvider({scheme: 'file', language: 'commits' }, codelensProvider)
 

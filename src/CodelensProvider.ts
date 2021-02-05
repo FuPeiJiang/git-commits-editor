@@ -1,19 +1,22 @@
 import { CodeLensProvider, TextDocument, CodeLens, workspace } from 'vscode'
+import { CallbackIfEval, CallBackUntilOtherEval } from './createRunThrough'
 // import * as vscode from 'vscode'
 /**
  * CodelensProvider
  */
 
-type CallbackFunctionVariadicReturnCodeLens = (...args: any[]) => CodeLens[] | Thenable<CodeLens[]>
+type FuncAnyReturnCodeLensArr = (...args: any[]) => CodeLens[]
+export type { FuncAnyReturnCodeLensArr }
+// type CallbackFunctionVariadicReturnCodeLens = (...args: any[]) => CodeLens[] | Thenable<CodeLens[]>
 
 export class CodelensProvider implements CodeLensProvider {
-  getRanges: CallbackFunctionVariadicReturnCodeLens
+  getRanges: FuncAnyReturnCodeLensArr
 
   // private regex: RegExp
   // private _onDidChangeCodeLenses: vscode.EventEmitter<void> = new vscode.EventEmitter<void>()
   // public readonly onDidChangeCodeLenses: vscode.Event<void> = this._onDidChangeCodeLenses.event
 
-  constructor(getRanges: CallbackFunctionVariadicReturnCodeLens) {
+  constructor(getRanges: FuncAnyReturnCodeLensArr) {
     this.getRanges = getRanges
     // this.regex = /(.+)/g
 

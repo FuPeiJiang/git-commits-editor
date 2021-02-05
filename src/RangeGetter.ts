@@ -36,14 +36,15 @@ export class RangeGetter {
     this.arrayOfToml = [
       [this.createCallIfToml(this.createStartsWith('[repo]'), (): void => {
         this.currentRepo = ''
-      }), (line: string, whichImIn: [number | null]): void => {
+      }), ((line, whichImIn) => {
+        // }), <CallBackUntilOtherEval>(line: string, whichImIn: [number | null]): void => {
         const currentRepo = validGitRepo(line)
         d('currentRepo', currentRepo)
         if (currentRepo) {
           whichImIn[0] = null
           this.currentRepo = currentRepo
         }
-      }],
+      }) as CallBackUntilOtherEval],
 
       [this.createCallIfToml(this.createStartsWith('[commit]'), (i: number): void => {
         this.commitMessage = ''
