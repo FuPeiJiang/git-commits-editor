@@ -25,10 +25,10 @@ var d = console.debug.bind(console)
 export function createRangeGetter(): FuncAnyReturnCodeLensArr {
   let currentRepo = ''
   let commitMessage = ''
-  let relativePaths: string[] = []
+  let fullPaths: string[] = []
   // let arrayOfToml: TypearrayOfToml
   let codeLenses: CodeLens[]
-
+  let commitRange: Range|null = null
   const arrayOfToml: TypearrayOfToml = [
     [createCallIfToml(createStartsWith('[repo]'), (): void => {
       currentRepo = ''
@@ -46,28 +46,25 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
       commitMessage = ''
       d('commit')
       if (currentRepo) {
-        const range = new Range(i, 0, i + 1, 0)
 
-        const command: Command = {
-          title: 'Codelens provided by sample extension',
-          command: 'codelens-sample.codelensAction',
-          arguments: ['stonks'],
-        }
 
-        codeLenses.push(new CodeLens(range, command))
+
+
+        commitCodeLens()
+        commitRange = new Range(i, 0, i, 0)
       }
     }), (line: string): void => {
       commitMessage = `${commitMessage}\n${line}`
     }],
 
     [createCallIfToml(createStartsWith('[files]'), (): void => {
-      relativePaths = []
+      fullPaths = []
       d('files')
       d(commitMessage)
     }), (line: string): void => {
       const fullPath = path.join(currentRepo, line)
       if (validFile(fullPath)) {
-        relativePaths.push(fullPath)
+        fullPaths.push(fullPath)
       }
     }],
     // [ createCallIfToml(createStartsWith('[repo]'),(): void=>{
@@ -76,13 +73,29 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
   ]
   const runThrough = createRunThrough(arrayOfToml, createPreprocessorForOther())
 
-
+  const command: Command = {
+    title: 'Commit',
+    command: 'codelens-sample.codelensAction',
+    // arguments: [commitMessage,relativePaths],
+  }
   // return getRanges(document: TextDocument): CodeLens[] => {
   return (document: TextDocument): CodeLens[] => {
     codeLenses = []
     runThrough(document)
-    d(relativePaths)
+    d(fullPaths)
+    commitCodeLens()
     return codeLenses
+  }
+
+  function commitCodeLens() {
+    // const tempCommand = new command()
+    command.arguments = [commitMessage,fullPaths]
+    commitMessage = ''
+    fullPaths = []
+    if (commitRange !== null) {
+      codeLenses.push(new CodeLens(commitRange, command))
+      commitRange = null
+    }
   }
 
   function createCallIfToml(ifFunc: TypeStringToBool, callback: TypeNumberToVoid) {

@@ -40,8 +40,9 @@ export function activate(): void {
     workspace.getConfiguration('codelens-sample').update('enableCodeLens', false, true)
   })
 
-  commands.registerCommand('codelens-sample.codelensAction', (args: string) => {
-    window.showInformationMessage(`CodeLens action clicked with args=${args}`)
+  commands.registerCommand('codelens-sample.codelensAction', (commitMessage: string, relativePaths: string[]) => {
+    d(commitMessage)
+    d(relativePaths)
   })
 }
 
