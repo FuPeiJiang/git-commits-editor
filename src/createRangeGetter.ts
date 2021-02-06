@@ -28,7 +28,7 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
   let fullPaths: string[] = []
   // let arrayOfToml: TypearrayOfToml
   let codeLenses: CodeLens[]
-  let commitRange: Range|null = null
+  let commitRange: Range | null = null
   const arrayOfToml: TypearrayOfToml = [
     [createCallIfToml(createStartsWith('[repo]'), (): void => {
       currentRepo = ''
@@ -36,23 +36,19 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
       // }), <CallBackUntilOtherEval>(line: string, whichImIn: [number | null]): void => {
       const tempRepo = validGitRepo(line)
       if (tempRepo) {
-        d('currentRepo', tempRepo)
         whichImIn[0] = null
         currentRepo = tempRepo
       }
     }) as CallBackUntilOtherEval],
 
     [createCallIfToml(createStartsWith('[commit]'), (i: number): void => {
-      commitMessage = ''
       d('commit')
       if (currentRepo) {
-
-
-
 
         commitCodeLens()
         commitRange = new Range(i, 0, i, 0)
       }
+      commitMessage = ''
     }), (line: string): void => {
       commitMessage = `${commitMessage}\n${line}`
     }],
@@ -60,41 +56,51 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
     [createCallIfToml(createStartsWith('[files]'), (): void => {
       fullPaths = []
       d('files')
-      d(commitMessage)
     }), (line: string): void => {
       const fullPath = path.join(currentRepo, line)
       if (validFile(fullPath)) {
         fullPaths.push(fullPath)
       }
     }],
-    // [ createCallIfToml(createStartsWith('[repo]'),(): void=>{
-    // currentRepo = ''
-    // }), repoLineHere.bind(this)],
   ]
   const runThrough = createRunThrough(arrayOfToml, createPreprocessorForOther())
 
-  const command: Command = {
-    title: 'Commit',
-    command: 'codelens-sample.codelensAction',
-    // arguments: [commitMessage,relativePaths],
-  }
-  // return getRanges(document: TextDocument): CodeLens[] => {
   return (document: TextDocument): CodeLens[] => {
     codeLenses = []
     runThrough(document)
-    d(fullPaths)
     commitCodeLens()
     return codeLenses
   }
 
   function commitCodeLens() {
-    // const tempCommand = new command()
-    command.arguments = [commitMessage,fullPaths]
+
+    if (commitRange !== null) {
+      codeLenses.push(new CodeLens(commitRange, newStageCommand(fullPaths)))
+
+      codeLenses.push(new CodeLens(commitRange, newCommitCommand(commitMessage)))
+      commitRange = null
+
+    }
     commitMessage = ''
     fullPaths = []
-    if (commitRange !== null) {
-      codeLenses.push(new CodeLens(commitRange, command))
-      commitRange = null
+    // stageCommand.arguments = []
+    // commitCommand.arguments = []
+
+  }
+
+  function newStageCommand(fullPaths: string[]): Command {
+    return {
+      title: 'Stage',
+      command: 'codelens-sample.stage',
+      arguments: [fullPaths],
+    }
+  }
+
+  function newCommitCommand(commitMessage: string): Command {
+    return {
+      title: 'Commit',
+      command: 'codelens-sample.commit',
+      arguments: [commitMessage],
     }
   }
 
@@ -128,7 +134,24 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
         .replace(regExprFiles, strFiles)
     }
   }
+  // const stageCommand: Command = {
+  // title: 'Stage',
+  // command: 'codelens-sample.stage',
+  // }
+  // const commitCommand: Command = {
+  // title: 'Commit',
+  // command: 'codelens-sample.commit',
+  // }
+  // arguments: [commitMessage,fullPaths],
 
+  // function diyCommandArguments(arg: any, commandTemplate: CommandTemplate) {
+  // {
+  // return (): Command => {
+  // commandTemplate.arguments = [arg]
+  // return commandTemplate
+  // }
+  // }
+  // }
 }
 
 

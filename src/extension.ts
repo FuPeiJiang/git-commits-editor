@@ -1,6 +1,5 @@
-import { languages, commands, Disposable, workspace, window } from 'vscode'
+import { languages, commands, Disposable, workspace } from 'vscode'
 import { CodelensProvider } from './CodelensProvider'
-import { RangeGetter } from './RangeGetter'
 import { createRangeGetter } from './createRangeGetter'
 var d = console.debug.bind(console)
 let disposables: Disposable[] = []
@@ -40,9 +39,12 @@ export function activate(): void {
     workspace.getConfiguration('codelens-sample').update('enableCodeLens', false, true)
   })
 
-  commands.registerCommand('codelens-sample.codelensAction', (commitMessage: string, relativePaths: string[]) => {
+  commands.registerCommand('codelens-sample.stage', (fullPaths: string[]) => {
+    d(fullPaths)
+  })
+
+  commands.registerCommand('codelens-sample.commit', (commitMessage: string) => {
     d(commitMessage)
-    d(relativePaths)
   })
 }
 
