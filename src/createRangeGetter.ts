@@ -9,15 +9,12 @@ import createRunThrough from './createRunThrough'
 import type { CallbackIfEval, CallBackUntilOtherEval } from './createRunThrough'
 import type { FuncAnyReturnCodeLensArr } from './CodelensProvider'
 
-// type CallbackIfEval = (line: string) => boolean
-// type CallBackUntilOtherEval = (line: string, whichImIn: [number | null], i: number) => void
-
 type TypearrayOfToml = Array<[CallbackIfEval, CallBackUntilOtherEval]>
 
 type CallbackFunctionString = (line: string) => string
 
 type TypeStringToBool = (line: string) => boolean
-// type TypeStringToVoid = (line: string) => void
+
 type TypeNumberToVoid = (i: number) => void
 
 var d = console.debug.bind(console)
@@ -26,14 +23,12 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
   let currentRepo = ''
   let commitMessage = ''
   let fullPaths: string[] = []
-  // let arrayOfToml: TypearrayOfToml
   let codeLenses: CodeLens[]
   let commitRange: Range | null = null
   const arrayOfToml: TypearrayOfToml = [
     [createCallIfToml(createStartsWith('[repo]'), (): void => {
       currentRepo = ''
     }), ((line, whichImIn) => {
-      // }), <CallBackUntilOtherEval>(line: string, whichImIn: [number | null]): void => {
       const tempRepo = validGitRepo(line)
       if (tempRepo) {
         whichImIn[0] = null
@@ -83,8 +78,6 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
     }
     commitMessage = ''
     fullPaths = []
-    // stageCommand.arguments = []
-    // commitCommand.arguments = []
 
   }
 
@@ -134,24 +127,7 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
         .replace(regExprFiles, strFiles)
     }
   }
-  // const stageCommand: Command = {
-  // title: 'Stage',
-  // command: 'codelens-sample.stage',
-  // }
-  // const commitCommand: Command = {
-  // title: 'Commit',
-  // command: 'codelens-sample.commit',
-  // }
-  // arguments: [commitMessage,fullPaths],
 
-  // function diyCommandArguments(arg: any, commandTemplate: CommandTemplate) {
-  // {
-  // return (): Command => {
-  // commandTemplate.arguments = [arg]
-  // return commandTemplate
-  // }
-  // }
-  // }
 }
 
 
