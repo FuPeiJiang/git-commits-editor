@@ -1,6 +1,6 @@
 
 
-import { TextDocument, CodeLens, Range, Command } from 'vscode'
+import { TextDocument, CodeLens, Range } from 'vscode'
 import fs = require('fs')
 import child_process = require('child_process')
 import path = require('path')
@@ -70,31 +70,23 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
   function commitCodeLens() {
 
     if (commitRange !== null) {
-      codeLenses.push(new CodeLens(commitRange, newStageCommand(fullPaths)))
+      codeLenses.push(new CodeLens(commitRange, {
+        title: 'Stage',
+        command: 'codelens-sample.stage',
+        arguments: [fullPaths],
+      }))
 
-      codeLenses.push(new CodeLens(commitRange, newCommitCommand(commitMessage)))
+      codeLenses.push(new CodeLens(commitRange, {
+        title: 'Commit',
+        command: 'codelens-sample.commit',
+        arguments: [commitMessage],
+      }))
       commitRange = null
 
     }
     commitMessage = ''
     fullPaths = []
 
-  }
-
-  function newStageCommand(fullPaths: string[]): Command {
-    return {
-      title: 'Stage',
-      command: 'codelens-sample.stage',
-      arguments: [fullPaths],
-    }
-  }
-
-  function newCommitCommand(commitMessage: string): Command {
-    return {
-      title: 'Commit',
-      command: 'codelens-sample.commit',
-      arguments: [commitMessage],
-    }
   }
 
   function createCallIfToml(ifFunc: TypeStringToBool, callback: TypeNumberToVoid) {
