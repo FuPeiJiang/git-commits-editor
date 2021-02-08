@@ -22,7 +22,7 @@ var d = console.debug.bind(console)
 export function createRangeGetter(): FuncAnyReturnCodeLensArr {
   let currentRepo = ''
   let commitMessage = ''
-  let fullPaths: string[] = []
+  let relativePaths: string[] = []
   let codeLenses: CodeLens[]
   let commitRange: Range | null = null
   const arrayOfToml: TypearrayOfToml = [
@@ -37,7 +37,6 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
     }) as CallBackUntilOtherEval],
 
     [createCallIfToml(createStartsWith('[commit]'), (i: number): void => {
-      d('commit')
       if (currentRepo) {
 
         commitCodeLens()
@@ -49,12 +48,11 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
     }],
 
     [createCallIfToml(createStartsWith('[files]'), (): void => {
-      fullPaths = []
-      d('files')
+      relativePaths = []
     }), (line: string): void => {
       const fullPath = path.join(currentRepo, line)
       if (validFile(fullPath)) {
-        fullPaths.push(fullPath)
+        relativePaths.push(line)
       }
     }],
   ]
@@ -73,7 +71,7 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
       codeLenses.push(new CodeLens(commitRange, {
         title: 'Stage',
         command: 'codelens-sample.stage',
-        arguments: [fullPaths],
+        arguments: [[currentRepo, relativePaths] as [string,string[]] ],
       }))
 
       codeLenses.push(new CodeLens(commitRange, {
@@ -85,7 +83,7 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
 
     }
     commitMessage = ''
-    fullPaths = []
+    relativePaths = []
 
   }
 

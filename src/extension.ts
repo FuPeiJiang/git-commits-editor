@@ -1,8 +1,11 @@
-import { languages, commands, Disposable, workspace } from 'vscode'
+import { languages, commands, Disposable, workspace, window } from 'vscode'
 import { CodelensProvider } from './CodelensProvider'
 import { createRangeGetter } from './createRangeGetter'
 var d = console.debug.bind(console)
 let disposables: Disposable[] = []
+
+import child_process = require('child_process')
+
 
 export function activate(): void {
 
@@ -17,8 +20,16 @@ export function activate(): void {
     workspace.getConfiguration('codelens-sample').update('enableCodeLens', false, true)
   })
 
-  commands.registerCommand('codelens-sample.stage', (fullPaths: string[]) => {
-    d(fullPaths)
+  commands.registerCommand('codelens-sample.stage', (repoAndFullPath: [string,string[]]) => {
+    const addCommand = `git add "${repoAndFullPath[1].join('" "')}"`
+    try {
+      child_process.execSync(addCommand, { cwd: repoAndFullPath[0] })
+
+      window.showInformationMessage(`files staged: ${addCommand}`)
+    } catch (error) {
+      window.showInformationMessage(error)
+    }
+
   })
 
   commands.registerCommand('codelens-sample.commit', (commitMessage: string) => {
