@@ -7,7 +7,6 @@ import { CallbackIfEval, CallBackUntilOtherEval } from './createRunThrough'
 
 type FuncAnyReturnCodeLensArr = (...args: any[]) => CodeLens[]
 export type { FuncAnyReturnCodeLensArr }
-// type CallbackFunctionVariadicReturnCodeLens = (...args: any[]) => CodeLens[] | Thenable<CodeLens[]>
 
 export class CodelensProvider implements CodeLensProvider {
   getRanges: FuncAnyReturnCodeLensArr
@@ -22,11 +21,10 @@ export class CodelensProvider implements CodeLensProvider {
 
   //   workspace.onDidChangeConfiguration(() => {
   // this._onDidChangeCodeLenses.fire()
-  //   })
+  //   })\
   }
 
-  public provideCodeLenses(document: TextDocument): CodeLens[] | Thenable<CodeLens[]> {
-    // public provideCodeLenses(document: TextDocument, token: vscode.CancellationToken): CodeLens[] | Thenable<CodeLens[]> {
+  public provideCodeLenses(document: TextDocument): CodeLens[] {
 
     if (workspace.getConfiguration('codelens-sample').get('enableCodeLens', true)) {
       return this.getRanges(document)
