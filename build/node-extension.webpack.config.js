@@ -1,8 +1,9 @@
 //@ts-check
 
-'use strict';
+'use strict'
 
-const path = require('path');
+const path = require('path')
+const ForkTsCheckerPlugin = require('fork-ts-checker-webpack-plugin')
 
 /**@type {import('webpack').Configuration}*/
 const config = {
@@ -37,5 +38,12 @@ const config = {
       },
     ],
   },
-};
-module.exports = config;
+  plugins : [
+    new ForkTsCheckerPlugin({
+      async: false,
+      eslint: { enabled: true, files: 'src/**/*.ts', options: { cache: true } },
+      formatter: 'basic',
+    }),
+  ],
+}
+module.exports = config
