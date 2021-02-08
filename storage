@@ -1,0 +1,78 @@
+  overridesss: [
+    {
+      files: [
+        'src/test/**',
+      ],
+      env: {
+        mocha: true, // now **/*.test.js files' env has both es6 *and* jest
+      },
+      // Can't extend in overrides: https://github.com/eslint/eslint/issues/8813
+      // "extends": ["plugin:jest/recommended"]
+      // plugins: ['mocha'],
+      // rules: {
+      // 'jest/no-disabled-tests': 'warn',
+      // 'jest/no-focused-tests': 'error',
+      // 'jest/no-identical-title': 'error',
+      // 'jest/prefer-to-have-length': 'warn',
+      // 'jest/valid-expect': 'error',
+      // },
+    },
+  ],
+
+  yarn add -D webpack-cli@4.2.0 webpack@5.19.0
+		"webpack": "5.19.0",
+
+  yarn add -D webpack-cli@latest
+  yarn add -D webpack@latest
+webpack-cli 4.5.0
+webpack 5.21.1
+
+webpack-cli@4.2.0
+broke
+webpack-cli 4.5.0
+
+yarn add -D webpack-cli@4.2.0
+good
+yarn add -D webpack-cli@4.3.0
+broke
+
+
+// A launch configuration that compiles the extension and then opens it inside a new window
+// Use IntelliSense to learn about possible attributes.
+// Hover to view descriptions of existing attributes.
+// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Run Extension",
+			"type": "extensionHost",
+			"request": "launch",
+			"runtimeExecutable": "${execPath}",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}"
+			],
+			"outFiles": [
+				"${workspaceFolder}/dist/**/*.js"
+			],
+			"skipFiles": ["<node_internals>/**", "**/node_modules/**", "**/resources/app/out/vs/**", "**/we've come a long way/**"],
+			"preLaunchTask": "${defaultBuildTask}",
+			"smartStep": true,
+			"sourceMaps": true,
+			"trace": true
+		},
+		{
+			"name": "Extension Tests",
+			"type": "extensionHost",
+			"request": "launch",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
+			],
+			"outFiles": [
+				"${workspaceFolder}/out/test/**/*.js"
+			],
+			"preLaunchTask": "npm: test-watch"
+		}
+	]
+}
