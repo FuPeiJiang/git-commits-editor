@@ -12,9 +12,27 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
   ],
-  'env': {
-    'node': true,
+  env: {
+    node: true,
+    es6: true,
+    // mocha: true, // now **/*.test.js files' env has both es6 *and* jest
   },
+  //https://stackoverflow.com/questions/31629389/how-to-use-eslint-with-jest?answertab=votes#answer-49211283
+  overrides: [
+    {
+      files: [
+        'src/test/**',
+      ],
+      env: {
+        mocha: true,
+      },
+      //https://stackoverflow.com/questions/55991419/eslint-with-mocha
+      plugins: ['mocha'],
+      extends: [
+        'plugin:mocha/recommended',
+      ],
+    },
+  ],
   'rules': {
     '@typescript-eslint/naming-convention': 'warn',
     '@typescript-eslint/semi': ['error', 'never'],
