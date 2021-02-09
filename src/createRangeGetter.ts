@@ -1,4 +1,4 @@
-
+var d = console.debug.bind(console)
 
 import { TextDocument, CodeLens, Range } from 'vscode'
 import fs = require('fs')
@@ -9,6 +9,9 @@ import createRunThrough from './createRunThrough'
 import type { CallbackIfEval, CallBackUntilOtherEval } from './createRunThrough'
 import type { FuncAnyReturnCodeLensArr } from './CodelensProvider'
 
+import { highlightArrOfLines } from './highlightArrOfLines'
+import type { ArrOfLines } from './highlightArrOfLines'
+
 type TypearrayOfToml = Array<[CallbackIfEval, CallBackUntilOtherEval]>
 
 type CallbackFunctionString = (line: string) => string
@@ -17,7 +20,6 @@ type TypeStringToBool = (line: string) => boolean
 
 type TypeNumberToVoid = (i: number) => void
 
-var d = console.debug.bind(console)
 
 export function createRangeGetter(): FuncAnyReturnCodeLensArr {
   let currentRepo = ''
@@ -25,25 +27,41 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
   let relativePaths: string[] = []
   let codeLenses: CodeLens[]
   let commitRange: Range | null = null
+  const resetArrOfLines = () => {
+    return {
+      red: [],
+      lime: [],
+    }
+  }
+  let arrOfLines: ArrOfLines = resetArrOfLines()
+  // const pendingRanges = {red: 0, lime: 0, orange: 0} //will be reassigned anyways
+  const pendingRanges: {[color: string]: number} = {} //will be reassigned anyways
+  for (const color in arrOfLines) {
+    pendingRanges[color] = 0
+  }
   const arrayOfToml: TypearrayOfToml = [
-    [createCallIfToml(createStartsWith('[repo]'), (): void => {
+    [createCallIfToml(createStartsWith('[repo]'), (i: number): void => {
       currentRepo = ''
+      pendingRanges.red = i
     }), ((line, whichImIn) => {
       const tempRepo = validGitRepo(line)
       if (tempRepo) {
         whichImIn[0] = null
         currentRepo = tempRepo
+        arrOfLines.red.push(new Range(pendingRanges.red,0,pendingRanges.red,0))
       }
     }) as CallBackUntilOtherEval],
 
     [createCallIfToml(createStartsWith('[commit]'), (i: number): void => {
       if (currentRepo) {
-
         commitCodeLens()
+
         commitRange = new Range(i, 0, i, 0)
+        arrOfLines.lime.push(commitRange)
       }
       commitMessage = ''
     }), (line: string): void => {
+      //append line
       commitMessage = `${commitMessage}\n${line}`
     }],
 
@@ -59,9 +77,11 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
   const runThrough = createRunThrough(arrayOfToml, createPreprocessorForOther())
 
   return (document: TextDocument): CodeLens[] => {
+    arrOfLines = resetArrOfLines()
     codeLenses = []
     runThrough(document)
     commitCodeLens()
+    highlightArrOfLines(arrOfLines)
     return codeLenses
   }
 

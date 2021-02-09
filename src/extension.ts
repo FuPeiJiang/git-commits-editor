@@ -1,7 +1,8 @@
+var d = console.debug.bind(console)
+
 import { languages, commands, Disposable, workspace, window } from 'vscode'
 import { CodelensProvider } from './CodelensProvider'
 import { createRangeGetter } from './createRangeGetter'
-var d = console.debug.bind(console)
 let disposables: Disposable[] = []
 
 import child_process = require('child_process')
