@@ -6,6 +6,7 @@ let disposables: Disposable[] = []
 
 import child_process = require('child_process')
 
+import simpleGit, {SimpleGit, SimpleGitOptions} from 'simple-git'
 
 export function activate(): void {
 
@@ -32,8 +33,24 @@ export function activate(): void {
 
   })
 
-  commands.registerCommand('codelens-sample.commit', (commitMessage: string) => {
-    d(commitMessage)
+  commands.registerCommand('codelens-sample.commit', (repoAndcommitMessage: [string, string]) => {
+    const options = <SimpleGitOptions> {
+      baseDir: repoAndcommitMessage[0],
+      binary: 'git',
+      maxConcurrentProcesses: 1,
+    }
+
+    const git: SimpleGit = simpleGit(options)
+
+    try {
+      git.commit(repoAndcommitMessage[1])
+
+      window.showInformationMessage(`commited: ${repoAndcommitMessage[1]}`)
+    } catch (error) {
+      window.showInformationMessage(error)
+
+    }
+
   })
 }
 

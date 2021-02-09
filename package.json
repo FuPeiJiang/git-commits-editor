@@ -75,5 +75,8 @@
 		"vscode-test": "^1.5.0",
 		"webpack": "^5.21.1",
 		"webpack-cli": "^4.5.0"
+	},
+	"dependencies": {
+		"simple-git": "^2.34.2"
 	}
 }

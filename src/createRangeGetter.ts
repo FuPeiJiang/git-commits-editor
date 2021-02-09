@@ -77,7 +77,7 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
       codeLenses.push(new CodeLens(commitRange, {
         title: 'Commit',
         command: 'codelens-sample.commit',
-        arguments: [commitMessage],
+        arguments: [[currentRepo, commitMessage] as [string, string] ],
       }))
       commitRange = null
 
