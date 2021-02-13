@@ -140,9 +140,6 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
 
 }
 
-
-
-
 function validFile(string: string): boolean {
   try {
     //lstatSync will throw if doesn't exist

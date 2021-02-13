@@ -22,7 +22,7 @@ export default (arrayOfToml: TypearrayOfToml, preprocessorForOther: CallbackFunc
 
       for (let n = 0, len = arrayOfToml.length; n < len; n++) {
         const [callbackIfEval] = arrayOfToml[n]
-        if (callbackIfEval(line, i)) {
+        if (callbackIfEval(line, i)) { //first callback
           whichImIn[0] = n
           continue loopLines
         }
@@ -31,7 +31,7 @@ export default (arrayOfToml: TypearrayOfToml, preprocessorForOther: CallbackFunc
       if (whichImIn[0] !== null) {
         const callBackUntilOtherEval = arrayOfToml[whichImIn[0]][1]
         const processedLine = preprocessorForOther(line)
-        callBackUntilOtherEval(processedLine, whichImIn)
+        callBackUntilOtherEval(processedLine, whichImIn) //second callback
       }
     }
   }

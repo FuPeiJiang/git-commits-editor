@@ -21,8 +21,8 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "git-commits-editor.helloWorld",
-				"title": "Hello World"
+				"command": "git-commits-editor.selectTOMLBlock",
+				"title": "git-commits-editor: Select TOML Block"
 			}
 		],
 		"languages": [
@@ -48,6 +48,7 @@
 		}
 	},
 	"scripts": {
+		"ext": "webpack --mode production --devtool hidden-source-map --config ./build/node-extension.webpack.config.js && vsce package -o git-commit-editor.vsix && code --install-extension git-commit-editor.vsix",
 		"vscode:prepublish": "yarn run package",
 		"compile": "webpack --config ./build/node-extension.webpack.config.js",
 		"watch": "webpack --mode development --watch --config ./build/node-extension.webpack.config.js",
