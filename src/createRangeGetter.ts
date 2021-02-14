@@ -39,6 +39,7 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
   for (const color in arrOfLines) {
     pendingRanges[color] = 0
   }
+  let commitTomlLine: number
   const arrayOfToml: TypearrayOfToml = [
     [createCallIfToml(createStartsWith('[repo]'), (i: number): void => {
       currentRepo = ''
@@ -58,6 +59,8 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
 
         commitRange = new Range(i, 0, i, 0)
         arrOfLines.lime.push(commitRange)
+
+        commitTomlLine = i
       }
       commitMessage = ''
     }), (line: string): void => {
@@ -97,7 +100,7 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
       codeLenses.push(new CodeLens(commitRange, {
         title: 'Commit',
         command: 'codelens-sample.commit',
-        arguments: [[currentRepo, commitMessage] as [string, string] ],
+        arguments: [currentRepo, commitMessage, commitTomlLine],
       }))
       commitRange = null
 

@@ -34,24 +34,30 @@ export function activate(): void {
 
   })
 
-  commands.registerCommand('codelens-sample.commit', (repoAndcommitMessage: [string, string]) => {
+  commands.registerCommand('codelens-sample.commit', (currentRepo: string, commitMessage: string, commitTomlLine: number) => {
     const options = <SimpleGitOptions>{
-      baseDir: repoAndcommitMessage[0],
+      baseDir: currentRepo,
       binary: 'git',
       maxConcurrentProcesses: 1,
     }
-
     const git: SimpleGit = simpleGit(options)
-
     try {
-      git.commit(repoAndcommitMessage[1])
-
-      window.showInformationMessage(`commited: ${repoAndcommitMessage[1]}`)
+      git.commit(commitMessage)
+      window.showInformationMessage(`commited: ${commitMessage}`)
     } catch (error) {
       window.showInformationMessage(error)
-
     }
 
+    const activeTextEditor = window.activeTextEditor
+    if (!activeTextEditor) {
+      return
+    }
+    const succeedded = activeTextEditor.edit(edit => {
+      edit.insert(new Position(commitTomlLine, 7), 'ted') // insert 'ted' after '[commit'
+    })
+    if (!succeedded) {
+      window.showInformationMessage('text insert failed')
+    }
   })
 
   commands.registerCommand('git-commits-editor.selectTOMLBlock', () => {
@@ -82,7 +88,7 @@ export function activate(): void {
       }
     }
     d(dataStartLine, dataEndLine)
-    activeTextEditor.selection = new Selection(new Position(dataStartLine,0), new Position(dataEndLine,arr[dataEndLine].length)) //arr[dataEndLine].length gets length till end of line
+    activeTextEditor.selection = new Selection(new Position(dataStartLine, 0), new Position(dataEndLine, arr[dataEndLine].length)) //arr[dataEndLine].length gets length till end of line
 
   })
 }
