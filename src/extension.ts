@@ -22,16 +22,22 @@ export function activate(): void {
     workspace.getConfiguration('codelens-sample').update('enableCodeLens', false, true)
   })
 
-  commands.registerCommand('codelens-sample.stage', (repoAndFullPath: [string, string[]]) => {
-    const addCommand = `git add "${repoAndFullPath[1].join('" "')}"`
-    try {
-      child_process.execSync(addCommand, { cwd: repoAndFullPath[0] })
-
-      window.showInformationMessage(`files staged: ${addCommand}`)
-    } catch (error) {
-      window.showInformationMessage(error)
+  commands.registerCommand('codelens-sample.stage', (currentRepo: string, relativePaths: string[]) => {
+    const options = <SimpleGitOptions>{
+      baseDir: currentRepo,
+      binary: 'git',
+      maxConcurrentProcesses: 1,
     }
-
+    const git: SimpleGit = simpleGit(options)
+    try {
+      // cannot directly git.add(relativePaths), because it silently fails if one path isn't good
+      for (let i = 0, len = relativePaths.length; i < len; i++) {
+        git.add(relativePaths[i])
+      }
+      window.showInformationMessage(`staged: ${relativePaths.join('\n')}`)
+    } catch (error) {
+      window.showInformationMessage(`error: ${error}`)
+    }
   })
 
   commands.registerCommand('codelens-sample.commit', (currentRepo: string, commitMessage: string, commitTomlLine: number) => {

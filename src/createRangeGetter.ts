@@ -71,10 +71,7 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
     [createCallIfToml(createStartsWith('[files]'), (): void => {
       relativePaths = []
     }), (line: string): void => {
-      const fullPath = path.join(currentRepo, line)
-      if (validFile(fullPath)) {
-        relativePaths.push(line)
-      }
+      relativePaths.push(line)
     }],
 
     [createCallIfToml(createStartsWith('[committed]'), (i: number): void => {
@@ -103,7 +100,7 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
       codeLenses.push(new CodeLens(commitRange, {
         title: 'Stage',
         command: 'codelens-sample.stage',
-        arguments: [[currentRepo, relativePaths] as [string, string[]]],
+        arguments: [currentRepo, relativePaths],
       }))
 
       codeLenses.push(new CodeLens(commitRange, {
@@ -150,20 +147,6 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
     }
   }
 
-}
-
-function validFile(string: string): boolean {
-  try {
-    //lstatSync will throw if doesn't exist
-    const stats = fs.lstatSync(string)
-    if (stats.isFile()) {
-      return true
-    } else {
-      return false
-    }
-  } catch (e) {
-    return false
-  }
 }
 
 function validGitRepo(string: string): string {
