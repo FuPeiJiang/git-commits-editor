@@ -66,23 +66,22 @@ export function activate(): void {
 
     //look up for TOML (look until top of document) (start at selected line), then look down for TOML
 
-    let dataStartLine = 1
-    //we don't even need to loop to 0, because 0 by default
-    for (let i = selectedLine; i > 0; i--) {
+    let dataStartLine = 0 //defaults to first line
+    for (let i = selectedLine; i > -1; i--) {
       if (tomlRegExp.test(arr[i])) {
         dataStartLine = i + 1
         break
       }
     }
 
-    let dataEndLine = arr.length
-    for (let i = selectedLine + 1, len = dataEndLine - 1; i < len; i++) {
+    let dataEndLine = arr.length - 1 //defaults to last line
+    for (let i = selectedLine + 1, len = arr.length; i < len; i++) {
       if (tomlRegExp.test(arr[i])) {
         dataEndLine = i - 1
         break
       }
     }
-
+    d(dataStartLine, dataEndLine)
     activeTextEditor.selection = new Selection(new Position(dataStartLine,0), new Position(dataEndLine,arr[dataEndLine].length)) //arr[dataEndLine].length gets length till end of line
 
   })
