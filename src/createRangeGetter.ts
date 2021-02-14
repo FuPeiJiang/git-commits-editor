@@ -35,7 +35,7 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
     }
   }
   let arrOfLines: ArrOfLines = resetArrOfLines()
-  const pendingRanges: {[color: string]: number} = {} //will be reassigned anyways
+  const pendingRanges: { [color: string]: number } = {} //will be reassigned anyways
   for (const color in arrOfLines) {
     pendingRanges[color] = 0
   }
@@ -49,7 +49,7 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
       if (tempRepo) {
         whichImIn[0] = null
         currentRepo = tempRepo
-        arrOfLines.red.push(new Range(pendingRanges.red,0,pendingRanges.red,0))
+        arrOfLines.red.push(new Range(pendingRanges.red, 0, pendingRanges.red, 0))
       }
     }) as CallBackUntilOtherEval],
 
@@ -78,8 +78,10 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
     }],
 
     [createCallIfToml(createStartsWith('[committed]'), (i: number): void => {
-      relativePaths = []
-      arrOfLines.committed.push(new Range(i,0,i,0))
+      if (currentRepo) {
+        commitCodeLens()
+      }
+      arrOfLines.committed.push(new Range(i, 0, i, 0))
     }), (): void => {
       return
     }],
@@ -101,7 +103,7 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
       codeLenses.push(new CodeLens(commitRange, {
         title: 'Stage',
         command: 'codelens-sample.stage',
-        arguments: [[currentRepo, relativePaths] as [string,string[]] ],
+        arguments: [[currentRepo, relativePaths] as [string, string[]]],
       }))
 
       codeLenses.push(new CodeLens(commitRange, {
