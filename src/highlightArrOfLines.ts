@@ -10,6 +10,7 @@ function decorationFromColor(color: string): TextEditorDecorationType {
 const colorsDecoration = <{ [color: string]: TextEditorDecorationType }>{
   red: decorationFromColor('#c94e4e'),
   lime: decorationFromColor('#4ec9b0'),
+  committed: decorationFromColor('#4c746c'),
 }
 
 // type ArrOfLines = [string, Range[]][]

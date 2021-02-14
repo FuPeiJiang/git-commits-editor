@@ -31,10 +31,10 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
     return {
       red: [],
       lime: [],
+      committed: [],
     }
   }
   let arrOfLines: ArrOfLines = resetArrOfLines()
-  // const pendingRanges = {red: 0, lime: 0, orange: 0} //will be reassigned anyways
   const pendingRanges: {[color: string]: number} = {} //will be reassigned anyways
   for (const color in arrOfLines) {
     pendingRanges[color] = 0
@@ -75,6 +75,13 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
       if (validFile(fullPath)) {
         relativePaths.push(line)
       }
+    }],
+
+    [createCallIfToml(createStartsWith('[committed]'), (i: number): void => {
+      relativePaths = []
+      arrOfLines.committed.push(new Range(i,0,i,0))
+    }), (): void => {
+      return
     }],
   ]
   const runThrough = createRunThrough(arrayOfToml, createPreprocessorForOther())
