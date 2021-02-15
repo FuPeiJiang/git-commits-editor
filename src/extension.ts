@@ -74,7 +74,7 @@ export function activate(): void {
     const selectedLine = activeTextEditor.selection.active.line
     const arr = activeTextEditor.document.getText().split('\n')
 
-    const tomlRegExp = new RegExp(String.raw`^\[[a-zA-Z\.-]+\](?!\])|^\[\[[a-zA-Z\.-]+\]\]`)
+    const tomlRegExp = /^\[[a-zA-Z.-]+\](?!\])|^\[\[[a-zA-Z.-]+\]\]/
 
     //look up for TOML (look until top of document) (start at selected line), then look down for TOML
 

@@ -134,9 +134,9 @@ export function createRangeGetter(): FuncAnyReturnCodeLensArr {
   }
 
   function createPreprocessorForOther(): CallbackFunctionString {
-    const regExprRepo = new RegExp(String.raw`(?<=^\\*)\\\[repo\]`)
-    const regExprCommit = new RegExp(String.raw`(?<=^\\*)\\\[commit\]`)
-    const regExprFiles = new RegExp(String.raw`(?<=^\\*)\\\[files\]`)
+    const regExprRepo = /(?<=^\\*)\\\[repo\]/
+    const regExprCommit = /(?<=^\\*)\\\[commit\]`/
+    const regExprFiles = /(?<=^\\*)\\\[files\]`/
     const strRepo = String.raw`[repo]`
     const strCommit = String.raw`[commit]`
     const strFiles = String.raw`[files]`
